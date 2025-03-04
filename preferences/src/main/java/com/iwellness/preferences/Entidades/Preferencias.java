@@ -21,5 +21,7 @@ public class Preferencias {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_preferencias")
     private Long _idPreferencias;
+    
+    @Column(nullable = false, unique = true)
     private String nombre;
 }

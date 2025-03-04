@@ -1,6 +1,7 @@
-package com.iwellness.preferences.Servicios;
+package com.iwellness.preferences.Servicios.PreferenciasServicio;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,18 @@ public class IPreferenciasServicioImpl implements IPreferenciasServicio{
     }
 
     @Override
-    public Preferencias BuscarPorId(Long id) {
-        return preferenciasRepositorio.findById(id).orElseThrow();
+    public Optional<Preferencias> BuscarPorId(Long id) {
+        return preferenciasRepositorio.findById(id);
+    }
+
+    @Override
+    public Preferencias guardar(Preferencias preferencia) {
+        return preferenciasRepositorio.save(preferencia);
+    }
+
+    @Override
+    public void eliminar(Long id) {
+        preferenciasRepositorio.deleteById(id);
     }
 
 }
