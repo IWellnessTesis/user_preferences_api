@@ -6,10 +6,17 @@ import com.iwellness.preferences.Entidades.ServicioXPreferencia;
 
 public interface IServicioXPreferenciaServicio {
 
+    List<ServicioXPreferencia> buscarTodos();
+
     List<ServicioXPreferencia> obtenerPorIdServicio(Long idServicio);
+
+    List<ServicioXPreferencia> findByPreferencia_IdPreferencias (Long idPreferencia);
 
     ServicioXPreferencia guardar(ServicioXPreferencia servicioXPreferencia);
 
     void eliminar(Long id);
+
+    ServicioXPreferencia actualizar(ServicioXPreferencia servicioXPreferencia);
+
 
 }

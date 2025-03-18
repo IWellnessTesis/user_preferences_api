@@ -1,6 +1,7 @@
 package com.iwellness.preferences.Controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,29 +29,38 @@ public class PreferenciasControlador {
 
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id){
-        return ResponseEntity.ok(preferenciasServicio.BuscarPorId(id));
-    }
-
-    @PostMapping
-    public Preferencias crearPreferencia(@RequestBody Preferencias preferencia) {
-        return preferenciasServicio.guardar(preferencia);
-    }
-
-     @PutMapping("/editar/{id}")
-    public ResponseEntity<Preferencias> actualizarPreferencia(@PathVariable Long id, @RequestBody Preferencias nuevaPreferencia) {
-        if (!preferenciasServicio.BuscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
+        try {
+            return ResponseEntity.ok(preferenciasServicio.BuscarPorId(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró la preferencia con ID: " + id);
         }
-        nuevaPreferencia.set_idPreferencias(id);
-        return ResponseEntity.ok(preferenciasServicio.guardar(nuevaPreferencia));
+    }
+
+    @PostMapping("/guardar/{preferencia}")
+    public ResponseEntity<?> guardarPreferencia(@RequestBody Preferencias preferencia) {
+        try {
+            return ResponseEntity.ok(preferenciasServicio.guardar(preferencia));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al guardar la preferencia: " + e.getMessage());
+        } 
+    }
+
+    @PutMapping("/editar/{preferencia}")
+    public ResponseEntity<?> actualizarPreferencia(@RequestBody Preferencias preferencia) {
+        try {
+            return ResponseEntity.ok(preferenciasServicio.actualizar(preferencia));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al actualizar la preferencia: " + e.getMessage());
+        }
     }
 
      @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Void> eliminarPreferencia(@PathVariable Long id) {
-        if (!preferenciasServicio.BuscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> eliminarPreferencia(@PathVariable Long id) {
+        try {
+            preferenciasServicio.eliminar(id);
+            return ResponseEntity.ok("Preferencia eliminada correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró la Preferencia con ID: " + id);
         }
-        preferenciasServicio.eliminar(id);
-        return ResponseEntity.noContent().build();
     }
 }

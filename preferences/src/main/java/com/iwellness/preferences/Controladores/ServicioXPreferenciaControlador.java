@@ -1,13 +1,14 @@
 package com.iwellness.preferences.Controladores;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,19 +23,55 @@ public class ServicioXPreferenciaControlador {
     @Autowired
     private IServicioXPreferenciaServicio servicioXPreferenciaServicio;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> obtenerTodas() {
+        return ResponseEntity.ok(servicioXPreferenciaServicio.buscarTodos());
+    }
+    
     @GetMapping("/servicio/{idServicio}")
-    public List<ServicioXPreferencia> obtenerPorServicio(@PathVariable Long idServicio) {
-        return servicioXPreferenciaServicio.obtenerPorIdServicio(idServicio);
+    public ResponseEntity<?> obtenerPorServicio(@PathVariable Long idServicio) {
+        try{
+            return ResponseEntity.ok(servicioXPreferenciaServicio.obtenerPorIdServicio(idServicio));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ningun servicio con ID: " + idServicio);
+        }
     }
 
-    @PostMapping
-    public ServicioXPreferencia asociarPreferencia(@RequestBody ServicioXPreferencia servicioXPreferencia) {
-        return servicioXPreferenciaServicio.guardar(servicioXPreferencia);
+    @GetMapping("/preferencia/{idPreferencia}")
+    public ResponseEntity<?> obtenerPorPreferencia(@PathVariable Long idPreferencia) {
+        try{
+            return ResponseEntity.ok(servicioXPreferenciaServicio.findByPreferencia_IdPreferencias (idPreferencia));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ninguna preferencia con ID: " + idPreferencia);
+        }
+    }
+    
+    @PostMapping("/crear")
+    public ResponseEntity<?> crear(@RequestBody ServicioXPreferencia nuevaRelacion) {
+        try {
+            return ResponseEntity.ok(servicioXPreferenciaServicio.guardar(nuevaRelacion));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al guardar el servicioXpreferencia: " + e.getMessage());
+        } 
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarAsociacion(@PathVariable Long id) {
-        servicioXPreferenciaServicio.eliminar(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/editar")
+    public ResponseEntity<?> actualizarPreferencia(@RequestBody ServicioXPreferencia servicioXPreferencia) {
+        
+        try {
+            return ResponseEntity.ok(servicioXPreferenciaServicio.actualizar(servicioXPreferencia));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al actualizar el servicioXPreferencia: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("eliminar/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        try {
+            servicioXPreferenciaServicio.eliminar(id);
+            return ResponseEntity.ok("servicioXpreferencia eliminado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el servicioXpreferencia con ID: " + id);
+        }    
     }
 }

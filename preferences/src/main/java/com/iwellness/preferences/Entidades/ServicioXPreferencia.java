@@ -25,10 +25,9 @@ public class ServicioXPreferencia {
     private Long _idServicioXPreferencia;
 
     @Column(name = "id_servicio", nullable = false)
-    private Long _idServicio;  // Se relaciona con el microservicio de servicios
+    private Long idServicio;  // Se relaciona con el microservicio de servicios
 
     @ManyToOne
-    @JoinColumn(name = "id_preferencia", nullable = false)
+    @JoinColumn(name = "id_preferencia", referencedColumnName = "id_preferencia", nullable = false)
     private Preferencias preferencia;
-
 }
