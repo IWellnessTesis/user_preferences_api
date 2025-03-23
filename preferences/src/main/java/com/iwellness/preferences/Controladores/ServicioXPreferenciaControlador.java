@@ -28,24 +28,6 @@ public class ServicioXPreferenciaControlador {
         return ResponseEntity.ok(servicioXPreferenciaServicio.buscarTodos());
     }
     
-    @GetMapping("/servicio/{idServicio}")
-    public ResponseEntity<?> obtenerPorServicio(@PathVariable Long idServicio) {
-        try{
-            return ResponseEntity.ok(servicioXPreferenciaServicio.obtenerPorIdServicio(idServicio));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ningun servicio con ID: " + idServicio);
-        }
-    }
-
-    @GetMapping("/preferencia/{idPreferencia}")
-    public ResponseEntity<?> obtenerPorPreferencia(@PathVariable Long idPreferencia) {
-        try{
-            return ResponseEntity.ok(servicioXPreferenciaServicio.findByPreferencia_IdPreferencias (idPreferencia));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ninguna preferencia con ID: " + idPreferencia);
-        }
-    }
-    
     @PostMapping("/crear")
     public ResponseEntity<?> crear(@RequestBody ServicioXPreferencia nuevaRelacion) {
         try {
@@ -73,5 +55,23 @@ public class ServicioXPreferenciaControlador {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el servicioXpreferencia con ID: " + id);
         }    
+    }
+    
+    @GetMapping("/servicio/{idServicio}")
+    public ResponseEntity<?> obtenerPorServicio(@PathVariable Long idServicio) {
+        try{
+            return ResponseEntity.ok(servicioXPreferenciaServicio.obtenerPorIdServicio(idServicio));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ningun servicio con ID: " + idServicio);
+        }
+    }
+
+    @GetMapping("/preferencia/{idPreferencia}")
+    public ResponseEntity<?> obtenerPorPreferencia(@PathVariable Long idPreferencia) {
+        try{
+            return ResponseEntity.ok(servicioXPreferenciaServicio.findByPreferencia_IdPreferencias (idPreferencia));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ninguna preferencia con ID: " + idPreferencia);
+        }
     }
 }

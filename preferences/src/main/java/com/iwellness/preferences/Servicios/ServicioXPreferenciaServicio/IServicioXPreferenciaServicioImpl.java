@@ -84,7 +84,8 @@ public class IServicioXPreferenciaServicioImpl implements IServicioXPreferenciaS
         if (!existePorId(id)) {
             throw new IllegalArgumentException("No se encontró la relación con ID: " + id);
         }
-        servicioXPreferenciaRepositorio.deleteById(id);    }
+        servicioXPreferenciaRepositorio.deleteById(id);    
+    }
 
     @Override
     public ServicioXPreferencia actualizar(ServicioXPreferencia servicioXPreferencia){

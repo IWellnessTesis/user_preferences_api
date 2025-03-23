@@ -25,9 +25,9 @@ public class TuristaXPreferencia {
     private Long _idTuristaXPreferencia;
 
     @Column(name = "id_usuario",nullable = false)
-    private Long _idUsuario;  // Se relaciona con el microservicio de usuarios
+    private Long idUsuario;  // Se relaciona con el microservicio de usuarios
 
     @ManyToOne
-    @JoinColumn(name = "id_preferencia", nullable = false)
+    @JoinColumn(name = "id_preferencia", referencedColumnName = "id_preferencia", nullable = false)
     private Preferencias preferencia;
 }
