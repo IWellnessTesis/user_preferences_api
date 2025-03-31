@@ -18,4 +18,6 @@ public interface ITuristaXPreferenciaServicio {
 
     Object findByPreferencia_IdPreferencias(Long idPreferencia);
 
+    public void eliminarPreferenciasPorTurista(Long idTurista);
+
 }

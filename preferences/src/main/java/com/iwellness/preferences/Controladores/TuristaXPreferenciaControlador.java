@@ -74,4 +74,10 @@ public class TuristaXPreferenciaControlador {
         }
     }
 
+    @DeleteMapping("/eliminarPorTurista/{idTurista}")
+    public ResponseEntity<String> eliminarPreferenciasPorTurista(@PathVariable Long idTurista) {
+        turistaXPreferenciaServicio.eliminarPreferenciasPorTurista(idTurista);
+        return ResponseEntity.ok("Preferencias del servicio eliminadas correctamente");
+    }
+
 }
