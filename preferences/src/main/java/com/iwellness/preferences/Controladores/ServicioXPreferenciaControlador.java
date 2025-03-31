@@ -74,4 +74,10 @@ public class ServicioXPreferenciaControlador {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ninguna preferencia con ID: " + idPreferencia);
         }
     }
+
+    @DeleteMapping("/eliminarPorServicio/{idServicio}")
+    public ResponseEntity<String> eliminarPreferenciasPorServicio(@PathVariable Long idServicio) {
+        servicioXPreferenciaServicio.eliminarPreferenciasPorServicio(idServicio);
+        return ResponseEntity.ok("Preferencias del servicio eliminadas correctamente");
+    }
 }

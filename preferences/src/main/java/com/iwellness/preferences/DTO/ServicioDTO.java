@@ -12,5 +12,4 @@ public class ServicioDTO {
     private String imagen;
     private String horario;
     private boolean estado;
-
 }

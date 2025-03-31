@@ -12,6 +12,8 @@ import com.iwellness.preferences.Entidades.ServicioXPreferencia;
 import com.iwellness.preferences.Repositorios.IPreferenciasRepositorio;
 import com.iwellness.preferences.Repositorios.IServicioXPreferenciaRepositorio;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class IServicioXPreferenciaServicioImpl implements IServicioXPreferenciaServicio{
 
@@ -84,6 +86,7 @@ public class IServicioXPreferenciaServicioImpl implements IServicioXPreferenciaS
         if (!existePorId(id)) {
             throw new IllegalArgumentException("No se encontró la relación con ID: " + id);
         }
+
         servicioXPreferenciaRepositorio.deleteById(id);    
     }
 
@@ -93,6 +96,11 @@ public class IServicioXPreferenciaServicioImpl implements IServicioXPreferenciaS
             throw new IllegalArgumentException("No se encontró la relación con ID: " + servicioXPreferencia.get_idServicioXPreferencia());
         }
         return servicioXPreferenciaRepositorio.save(servicioXPreferencia);
+    }
+
+    @Transactional
+    public void eliminarPreferenciasPorServicio(Long idServicio) {
+        servicioXPreferenciaRepositorio.deleteByidServicio(idServicio);
     }
 
 }

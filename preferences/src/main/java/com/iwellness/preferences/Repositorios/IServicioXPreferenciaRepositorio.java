@@ -16,4 +16,6 @@ public interface IServicioXPreferenciaRepositorio extends CrudRepository<Servici
 
     @Query("SELECT sxp FROM ServicioXPreferencia sxp WHERE sxp.preferencia._idPreferencias = :idPreferencia")
     List<ServicioXPreferencia> findByPreferencia_IdPreferencias (@Param("idPreferencia")Long idPreferencia);
+
+    void deleteByidServicio(Long idServicio);
 }

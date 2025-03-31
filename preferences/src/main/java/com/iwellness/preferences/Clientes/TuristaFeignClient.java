@@ -9,7 +9,7 @@ import com.iwellness.preferences.DTO.TuristaDTO;
 @FeignClient(name = "turista-ms", url = "http://localhost:8080/auth")
 public interface TuristaFeignClient {
 
-    @GetMapping("/buscar/{idTurista}")
-    TuristaDTO  obtenerTurista(@PathVariable("idTurista") Long idTurista);
+    @GetMapping("/buscar/{idUsuario}")
+    TuristaDTO  obtenerTurista(@PathVariable("idUsuario") Long idUsuario);
 
 }
