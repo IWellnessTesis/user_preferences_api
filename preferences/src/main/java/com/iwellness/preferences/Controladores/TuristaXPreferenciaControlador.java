@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iwellness.preferences.Entidades.TuristaXPreferencia;
 import com.iwellness.preferences.Servicios.TuristaXPreferenciaServicio.ITuristaXPreferenciaServicio;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/turistaXPreferencia")
 public class TuristaXPreferenciaControlador {

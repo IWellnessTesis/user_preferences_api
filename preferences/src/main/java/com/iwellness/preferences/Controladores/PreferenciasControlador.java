@@ -38,7 +38,7 @@ public class PreferenciasControlador {
         }
     }
 
-    @PostMapping("/guardar/{preferencia}")
+    @PostMapping("/guardar")
     public ResponseEntity<?> guardarPreferencia(@RequestBody Preferencias preferencia) {
         try {
             return ResponseEntity.ok(preferenciasServicio.guardar(preferencia));
@@ -47,7 +47,7 @@ public class PreferenciasControlador {
         } 
     }
 
-    @PutMapping("/editar/{preferencia}")
+    @PutMapping("/editar")
     public ResponseEntity<?> actualizarPreferencia(@RequestBody Preferencias preferencia) {
         try {
             return ResponseEntity.ok(preferenciasServicio.actualizar(preferencia));
