@@ -32,6 +32,7 @@ public class MensajeServicePreferencesConfig {
         template.setMessageConverter(messageConverter());
         return template;
     }
+    
     @Bean
     public Queue queue() {
         return new Queue(QUEUE_NAME, true);
