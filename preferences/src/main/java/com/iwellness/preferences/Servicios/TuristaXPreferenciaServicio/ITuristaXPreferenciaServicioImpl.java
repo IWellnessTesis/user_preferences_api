@@ -61,7 +61,7 @@ public class ITuristaXPreferenciaServicioImpl implements ITuristaXPreferenciaSer
         try {
             turistaDTO = turistaFeignClient.obtenerTurista(turistaXPreferencia.getIdUsuario());
         } catch (Exception e) {
-            throw new RuntimeException("Error al comunicarse con el microservicio de servicios: " + e.getMessage());
+            throw new RuntimeException("Error al comunicarse con el microservicio de usuarios: " + e.getMessage());
         }
 
         if (turistaDTO == null) {
