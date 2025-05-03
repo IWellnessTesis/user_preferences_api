@@ -3,6 +3,7 @@ package com.iwellness.preferences.Controladores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iwellness.preferences.Entidades.TuristaXPreferencia;
 import com.iwellness.preferences.Servicios.TuristaXPreferenciaServicio.ITuristaXPreferenciaServicio;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/turistaXPreferencia")
 public class TuristaXPreferenciaControlador {
@@ -72,6 +74,12 @@ public class TuristaXPreferenciaControlador {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ninguna preferencia con ID: " + idPreferencia);
         }
+    }
+
+    @DeleteMapping("/eliminarPorTurista/{idTurista}")
+    public ResponseEntity<String> eliminarPreferenciasPorTurista(@PathVariable Long idTurista) {
+        turistaXPreferenciaServicio.eliminarPreferenciasPorTurista(idTurista);
+        return ResponseEntity.ok("Preferencias del servicio eliminadas correctamente");
     }
 
 }

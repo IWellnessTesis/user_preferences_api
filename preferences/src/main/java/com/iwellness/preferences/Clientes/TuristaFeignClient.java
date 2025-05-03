@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.iwellness.preferences.DTO.TuristaDTO;
 
-@FeignClient(name = "turista-ms", url = "http://localhost:8080/auth")
+@FeignClient(name = "turista-ms", url = "http://localhost:8082/usuarios")
 public interface TuristaFeignClient {
 
-    @GetMapping("/buscar/{idTurista}")
-    TuristaDTO  obtenerTurista(@PathVariable("idTurista") Long idTurista);
+    @GetMapping("/buscar/{idUsuario}")
+    TuristaDTO  obtenerTurista(@PathVariable("idUsuario") Long idUsuario);
 
 }

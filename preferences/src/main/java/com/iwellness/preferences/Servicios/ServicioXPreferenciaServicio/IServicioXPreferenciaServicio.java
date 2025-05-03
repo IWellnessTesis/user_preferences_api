@@ -18,5 +18,6 @@ public interface IServicioXPreferenciaServicio {
 
     ServicioXPreferencia actualizar(ServicioXPreferencia servicioXPreferencia);
 
+    void eliminarPreferenciasPorServicio(Long idServicio);
 
 }

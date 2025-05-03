@@ -24,4 +24,7 @@ public class Preferencias {
     
     @Column(nullable = false, unique = true)
     private String nombre;
+
+    @Column
+    private String imagen;
 }

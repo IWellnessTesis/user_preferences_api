@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class TuristaDTO {
-    private Long _idTurista;
     private Long _idUsuario;
     private int telefono;
     private String direccion;
