@@ -1,6 +1,5 @@
 package com.iwellness.preferences.Servicios.Rabbit;
 
-import java.beans.BeanProperty;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -13,8 +12,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MensajeServicePreferencesConfig {
     public static final String EXCHANGE_NAME = "message_exchange";
-    public static final String QUEUE_NAME = "my_queue";
-    public static final String ROUTING_KEY_PREFERENCE = "my_routing_key_proference";
+    public static final String QUEUE_NAME_PREFERENCES = "my_queue_preferences";
+    public static final String ROUTING_KEY_PREFERENCE = "my_routing_key_preference";
+    public static final String QUEUE_NAME_SERVICIOXPREFERENCIA = "my_queue_servicexpreferences";
+    public static final String ROUTING_KEY_SERVICIOXPREFERENCIA = "my_routing_key_servicexpreferences";
+    public static final String QUEUE_NAME_TURISTAXPREFERENCIA = "my_queue_turistxpreferences";
+    public static final String ROUTING_KEY_TURISTAXPREFERENCIA = "my_routing_key_turistxpreferences";
 
     @Bean
     public TopicExchange topicexchange() {
@@ -34,12 +37,34 @@ public class MensajeServicePreferencesConfig {
     }
     
     @Bean
-    public Queue queue() {
-        return new Queue(QUEUE_NAME, true);
+    public Queue queuePreferences() {
+        return new Queue(QUEUE_NAME_PREFERENCES, true);
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
+    public Queue queueServicexPreferences() {
+        return new Queue(QUEUE_NAME_SERVICIOXPREFERENCIA, true);
+    }
+
+    @Bean
+    public Queue queueTuristxPreferences() {
+        return new Queue(QUEUE_NAME_TURISTAXPREFERENCIA, true);
+    }
+    
+
+    @Bean
+    public Binding bindingPreferences(Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY_PREFERENCE);
     }
+
+    @Bean
+    public Binding bindingServicexPreferences(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY_SERVICIOXPREFERENCIA);
+    }
+
+    @Bean
+    public Binding bindingTuristxPreferences(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY_TURISTAXPREFERENCIA);
+    }
+    
 }

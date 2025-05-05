@@ -1,5 +1,10 @@
 package com.iwellness.preferences.Controladores;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iwellness.preferences.Clientes.TuristaFeignClient;
+import com.iwellness.preferences.DTO.TuristaDTO;
+import com.iwellness.preferences.DTO.UsuarioInteresesDTO;
 import com.iwellness.preferences.Entidades.TuristaXPreferencia;
 import com.iwellness.preferences.Servicios.TuristaXPreferenciaServicio.ITuristaXPreferenciaServicio;
 
@@ -23,6 +31,12 @@ public class TuristaXPreferenciaControlador {
 
     @Autowired
     private ITuristaXPreferenciaServicio turistaXPreferenciaServicio;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private TuristaFeignClient turistaFeignClient;
 
     @GetMapping("/all")
     public ResponseEntity<?> obtenerTodas() {
@@ -60,12 +74,42 @@ public class TuristaXPreferenciaControlador {
 
     @GetMapping("/turista/{idUsuario}")
     public ResponseEntity<?> obtenerPorTurista(@PathVariable Long idUsuario) {
-        try{
-            return ResponseEntity.ok(turistaXPreferenciaServicio.obtenerPorIdUsuario(idUsuario));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ningun usuario con ID: " + idUsuario);
-        }
+        try {
+            // Obtener las preferencias del turista
+            List<TuristaXPreferencia> preferencias = turistaXPreferenciaServicio.obtenerPorIdUsuario(idUsuario);
+
+            if (preferencias.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No se encontraron preferencias para el usuario con ID: " + idUsuario);
+            }
+
+            // Obtener el país desde el microservicio de usuarios
+            TuristaDTO turista = turistaFeignClient.obtenerTurista(idUsuario);
+
+            // Crear el DTO con la información del turista
+            UsuarioInteresesDTO usuarioInteresesDTO = new UsuarioInteresesDTO();
+            usuarioInteresesDTO.setUserId(idUsuario.toString());
+            usuarioInteresesDTO.setPais(turista.getPais());
+
+            // Obtener los nombres de las preferencias
+            List<String> intereses = preferencias.stream()
+                    .map(pref -> pref.getPreferencia() != null ? pref.getPreferencia().getNombre() : "Desconocido")
+                    .collect(Collectors.toList());
+
+            usuarioInteresesDTO.setIntereses(intereses);
+            usuarioInteresesDTO.setFechaDeBusqueda(LocalDateTime.now().toString());
+
+            // Enviar a la cola
+            rabbitTemplate.convertAndSend("message_exchange", "my_queue_turistxpreferences", usuarioInteresesDTO);
+
+            return ResponseEntity.ok(preferencias);
+
+        } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al obtener información del usuario: " + e.getMessage());
     }
+}
+
 
     @GetMapping("/preferencia/{idPreferencia}")
     public ResponseEntity<?> obtenerPorPreferencia(@PathVariable Long idPreferencia) {
