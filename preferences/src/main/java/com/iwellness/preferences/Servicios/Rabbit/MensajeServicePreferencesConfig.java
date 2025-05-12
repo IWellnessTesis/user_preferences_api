@@ -13,15 +13,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class MensajeServicePreferencesConfig {
 
     public static final String EXCHANGE_NAME = "message_exchange";
-
-    public static final String QUEUE_NAME_PREFERENCES = "my_queue_preferences";
-    public static final String ROUTING_KEY_PREFERENCE = "my_routing_key_preference";
-
-    public static final String QUEUE_NAME_SERVICIOXPREFERENCIA = "my_queue_servicexpreferences";
-    public static final String ROUTING_KEY_SERVICIOXPREFERENCIA = "my_routing_key_servicexpreferences";
-
+    //CASO 2
     public static final String QUEUE_NAME_TURISTAXPREFERENCIA = "my_queue_turistxpreferences";
     public static final String ROUTING_KEY_TURISTAXPREFERENCIA = "my_routing_key_turistxpreferences";
+    //CASO 4
+    public static final String QUEUE_NAME_TURISTAXPREFERENCIA_ESTADOCIVIL = "my_queue_turistxpreferences_estadocivil";
+    public static final String ROUTING_KEY_TURISTAXPREFERENCIA_ESTADOCIVIL = "my_routing_key_turistxpreferences_estadocivil";
 
     @Bean
     public TopicExchange topicexchange() {
@@ -41,35 +38,17 @@ public class MensajeServicePreferencesConfig {
     }
 
     @Bean
-    public Queue queuePreferences() {
-        return new Queue(QUEUE_NAME_PREFERENCES, true);
+    public Queue queueTuristxPreferencesEstadoCivil() {
+        return new Queue(QUEUE_NAME_TURISTAXPREFERENCIA_ESTADOCIVIL, true);
     }
 
-    @Bean
-    public Queue queueServicexPreferences() {
-        return new Queue(QUEUE_NAME_SERVICIOXPREFERENCIA, true);
-    }
+   
 
     @Bean
     public Queue queueTuristxPreferences() {
         return new Queue(QUEUE_NAME_TURISTAXPREFERENCIA, true);
     }
 
-    @Bean
-    public Binding bindingPreferences(
-        @Qualifier("queuePreferences") Queue queue,
-        TopicExchange exchange
-    ) {
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY_PREFERENCE);
-    }
-
-    @Bean
-    public Binding bindingServicexPreferences(
-        @Qualifier("queueServicexPreferences") Queue queue,
-        TopicExchange exchange
-    ) {
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY_SERVICIOXPREFERENCIA);
-    }
 
     @Bean
     public Binding bindingTuristxPreferences(
@@ -77,5 +56,13 @@ public class MensajeServicePreferencesConfig {
         TopicExchange exchange
     ) {
         return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY_TURISTAXPREFERENCIA);
+    }
+
+    @Bean
+    public Binding bindingTuristxPreferencesEstadoCivil(
+        @Qualifier("queueTuristxPreferencesEstadoCivil") Queue queue,
+        TopicExchange exchange
+    ) {
+        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY_TURISTAXPREFERENCIA_ESTADOCIVIL);
     }
 }

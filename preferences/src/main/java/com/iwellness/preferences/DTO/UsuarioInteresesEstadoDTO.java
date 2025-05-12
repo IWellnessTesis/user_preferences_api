@@ -5,8 +5,10 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class UsuarioInteresesDTO {
+public class UsuarioInteresesEstadoDTO {
     private String userId;
-    private String pais;
     private List<String> intereses;
+    private String estadoCivil;
+    private String genero;
+    
 }

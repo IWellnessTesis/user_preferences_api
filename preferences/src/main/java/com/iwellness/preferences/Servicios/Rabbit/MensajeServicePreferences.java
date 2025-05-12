@@ -13,7 +13,7 @@ public class MensajeServicePreferences {
     }
 
     public void enviarMensaje(String mensaje) {
-        rabbitTemplate.convertAndSend(MensajeServicePreferencesConfig.EXCHANGE_NAME, MensajeServicePreferencesConfig.ROUTING_KEY_PREFERENCE, mensaje);
+        rabbitTemplate.convertAndSend(MensajeServicePreferencesConfig.EXCHANGE_NAME, MensajeServicePreferencesConfig.ROUTING_KEY_TURISTAXPREFERENCIA, mensaje);
         System.out.println("Mensaje enviado: " + mensaje);
     }
 }

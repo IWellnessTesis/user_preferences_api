@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iwellness.preferences.Clientes.TuristaFeignClient;
 import com.iwellness.preferences.DTO.TuristaDTO;
 import com.iwellness.preferences.DTO.UsuarioInteresesDTO;
+import com.iwellness.preferences.DTO.UsuarioInteresesEstadoDTO;
 import com.iwellness.preferences.Entidades.TuristaXPreferencia;
 import com.iwellness.preferences.Servicios.TuristaXPreferenciaServicio.ITuristaXPreferenciaServicio;
 
@@ -75,6 +76,7 @@ public class TuristaXPreferenciaControlador {
     @GetMapping("/turista/{idUsuario}")
     public ResponseEntity<?> obtenerPorTurista(@PathVariable Long idUsuario) {
         try {
+
             // Obtener las preferencias del turista
             List<TuristaXPreferencia> preferencias = turistaXPreferenciaServicio.obtenerPorIdUsuario(idUsuario);
 
@@ -86,10 +88,27 @@ public class TuristaXPreferenciaControlador {
             // Obtener el país desde el microservicio de usuarios
             TuristaDTO turista = turistaFeignClient.obtenerTurista(idUsuario);
 
-            // Crear el DTO con la información del turista
+            //Acceder al pais del turista (anidado)
+            String pais = turista.getTuristaInfo().getPais();
+
+
+            System.out.println("Pais del turista: " + pais);
+
+            // Crear el DTO con la información del turista -> Caso 2
             UsuarioInteresesDTO usuarioInteresesDTO = new UsuarioInteresesDTO();
             usuarioInteresesDTO.setUserId(idUsuario.toString());
-            usuarioInteresesDTO.setPais(turista.getPais());
+            usuarioInteresesDTO.setPais(pais);
+
+
+            //Acceder al estado civil del turista (anidado)
+            String estadoCivil = turista.getTuristaInfo().getEstadoCivil();
+            String genero = turista.getTuristaInfo().getGenero();
+
+            // Crear el DTO con la información del turista -> Caso 4
+            UsuarioInteresesEstadoDTO usuarioInteresesEstadoDTO = new UsuarioInteresesEstadoDTO();
+            usuarioInteresesEstadoDTO.setUserId(idUsuario.toString());
+            usuarioInteresesEstadoDTO.setEstadoCivil(estadoCivil);
+            usuarioInteresesEstadoDTO.setGenero(genero);
 
             // Obtener los nombres de las preferencias
             List<String> intereses = preferencias.stream()
@@ -97,10 +116,15 @@ public class TuristaXPreferenciaControlador {
                     .collect(Collectors.toList());
 
             usuarioInteresesDTO.setIntereses(intereses);
-            usuarioInteresesDTO.setFechaDeBusqueda(LocalDateTime.now().toString());
+            usuarioInteresesEstadoDTO.setIntereses(intereses);
 
-            // Enviar a la cola
-            rabbitTemplate.convertAndSend("message_exchange", "my_queue_turistxpreferences", usuarioInteresesDTO);
+            System.out.println("Usuario intereses: " + usuarioInteresesDTO);
+
+            // Enviar a la cola -> Caso 2
+            rabbitTemplate.convertAndSend("message_exchange", "my_routing_key_turistxpreferences", usuarioInteresesDTO);
+            //Enviar a la cola -> Caso 4
+            rabbitTemplate.convertAndSend("message_exchange", "my_routing_key_turistxpreferences_estadocivil", usuarioInteresesEstadoDTO);
+
 
             return ResponseEntity.ok(preferencias);
 
