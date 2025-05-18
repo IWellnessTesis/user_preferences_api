@@ -87,7 +87,7 @@ public class PreferenciasControladorTest {
         String preferenciaJson = objectMapper.writeValueAsString(preferencias);
 
         // Se utiliza un valor "dummy" en la URL para completar la ruta
-        mockMvc.perform(post("/api/preferencias/guardar/dummy")
+        mockMvc.perform(post("/api/preferencias/guardar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(preferenciaJson))
                 .andExpect(status().isOk());
@@ -102,7 +102,7 @@ public class PreferenciasControladorTest {
         Preferencias preferencias = new Preferencias();
         String preferenciaJson = objectMapper.writeValueAsString(preferencias);
 
-        mockMvc.perform(post("/api/preferencias/guardar/dummy")
+        mockMvc.perform(post("/api/preferencias/guardar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(preferenciaJson))
                 .andExpect(status().isBadRequest());
@@ -116,7 +116,7 @@ public class PreferenciasControladorTest {
 
         String preferenciaJson = objectMapper.writeValueAsString(preferencias);
 
-        mockMvc.perform(put("/api/preferencias/editar/dummy")
+        mockMvc.perform(put("/api/preferencias/editar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(preferenciaJson))
                 .andExpect(status().isOk());
@@ -131,7 +131,7 @@ public class PreferenciasControladorTest {
             Preferencias preferencias = new Preferencias();
         String preferenciaJson = objectMapper.writeValueAsString(preferencias);
 
-        mockMvc.perform(put("/api/preferencias/editar/dummy")
+        mockMvc.perform(put("/api/preferencias/editar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(preferenciaJson))
                 .andExpect(status().isBadRequest());
@@ -157,7 +157,7 @@ public class PreferenciasControladorTest {
         doThrow(new RuntimeException("No se encontró la entidad con ID: " + id))
             .when(preferenciasServicio).eliminar(id);
 
-        mockMvc.perform(delete("/api/preferencias/elimnar/{id}", id)
+        mockMvc.perform(delete("/api/preferencias/eliminar/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
