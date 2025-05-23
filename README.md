@@ -60,7 +60,7 @@ Además, para la publicación y procesamiento de mensajes, deben estar en funcio
 ## 🧪 Pruebas
 
 - Test unitarios e integrados con JUnit + MockMvc.
-- Pruebas de consumo de colas (RabbitMQ) y validación de eventos.
+
 
 
 
