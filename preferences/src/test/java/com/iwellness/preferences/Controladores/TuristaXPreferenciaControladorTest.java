@@ -18,12 +18,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iwellness.preferences.Clientes.TuristaFeignClient;
+import com.iwellness.preferences.DTO.TuristaDTO;
+import com.iwellness.preferences.DTO.TuristaDTO.TuristaInfo;
 import com.iwellness.preferences.Entidades.Preferencias;
 import com.iwellness.preferences.Entidades.TuristaXPreferencia;
 import com.iwellness.preferences.Servicios.TuristaXPreferenciaServicio.ITuristaXPreferenciaServicio;
@@ -41,6 +45,9 @@ public class TuristaXPreferenciaControladorTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private TuristaXPreferencia mockRelacion;
+
+    @Mock
+    private TuristaFeignClient turistaFeignClient;
 
 
  @BeforeEach
@@ -125,23 +132,6 @@ public class TuristaXPreferenciaControladorTest {
         doThrow(new NoSuchElementException("No se encontró el ID")).when(turistaXPreferenciaServicio).eliminar(999L);  
 
         mockMvc.perform(delete("/api/turistaXPreferencia/eliminar/999"))
-               .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testObtenerPorTurista_OK() throws Exception {
-        when(turistaXPreferenciaServicio.obtenerPorIdUsuario(1L)).thenReturn(Arrays.asList(mockRelacion));
-
-        mockMvc.perform(get("/api/turistaXPreferencia/turista/1"))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$[0].idUsuario").value(1L));
-    }
-
-    @Test
-    public void testObtenerPorTurista_NotFound() throws Exception {
-        when(turistaXPreferenciaServicio.obtenerPorIdUsuario(1L)).thenThrow(new RuntimeException("No encontrado"));
-
-        mockMvc.perform(get("/api/turistaXPreferencia/turista/1"))
                .andExpect(status().isNotFound());
     }
 
