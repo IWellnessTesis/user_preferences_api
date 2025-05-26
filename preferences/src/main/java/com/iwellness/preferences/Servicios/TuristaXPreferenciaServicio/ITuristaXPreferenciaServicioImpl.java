@@ -12,6 +12,8 @@ import com.iwellness.preferences.Entidades.TuristaXPreferencia;
 import com.iwellness.preferences.Repositorios.IPreferenciasRepositorio;
 import com.iwellness.preferences.Repositorios.ITuristaXPreferenciaRepositorio;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ITuristaXPreferenciaServicioImpl implements ITuristaXPreferenciaServicio{
 
@@ -59,7 +61,7 @@ public class ITuristaXPreferenciaServicioImpl implements ITuristaXPreferenciaSer
         try {
             turistaDTO = turistaFeignClient.obtenerTurista(turistaXPreferencia.getIdUsuario());
         } catch (Exception e) {
-            throw new RuntimeException("Error al comunicarse con el microservicio de servicios: " + e.getMessage());
+            throw new RuntimeException("Error al comunicarse con el microservicio de usuarios: " + e.getMessage());
         }
 
         if (turistaDTO == null) {
@@ -89,5 +91,10 @@ public class ITuristaXPreferenciaServicioImpl implements ITuristaXPreferenciaSer
             throw new IllegalArgumentException("No se encontró la relación con ID: " + turistaXPreferencia.get_idTuristaXPreferencia());
         }
         return turistaXPreferenciaRepositorio.save(turistaXPreferencia);
+    }
+
+    @Transactional
+    public void eliminarPreferenciasPorTurista(Long idTurista) {
+        turistaXPreferenciaRepositorio.deleteByidUsuario(idTurista);
     }
 }

@@ -5,8 +5,13 @@ import lombok.Data;
 @Data
 public class TuristaDTO {
     private Long _idUsuario;
-    private int telefono;
-    private String direccion;
-    private String ciudad;
-    private String pais;
+    private TuristaInfo turistaInfo;
+
+
+    @Data
+    public static class TuristaInfo {
+       private String pais;
+       private String estadoCivil;
+       private String genero;
+    }
 }

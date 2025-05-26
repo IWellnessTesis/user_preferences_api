@@ -17,4 +17,6 @@ public interface ITuristaXPreferenciaRepositorio extends CrudRepository<TuristaX
     @Query("SELECT sxp FROM TuristaXPreferencia sxp WHERE sxp.preferencia._idPreferencias = :idPreferencia")
     List<TuristaXPreferencia> findByPreferencia_IdPreferencias (@Param("idPreferencia")Long idPreferencia);
 
+    void deleteByidUsuario(Long idUsuario);
+
 }
